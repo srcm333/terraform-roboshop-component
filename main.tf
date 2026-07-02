@@ -55,7 +55,7 @@ resource "aws_ami_from_instance" "main" {
   )
 }
 
-resource "aws_launch_template" "main" {
+/* resource "aws_launch_template" "main" {
   name = "${local.common_name}"
 
   image_id = aws_ami_from_instance.main.id # AMI ID
@@ -203,4 +203,4 @@ resource "terraform_data" "main_delete" {
   provisioner "local-exec" {
     command = "aws ec2 terminate-instances --instance-ids ${aws_instance.main.id}"
   }
-}
+} */
