@@ -44,25 +44,25 @@ resource "terraform_data" "main" {
 }
 
 resource "aws_ami_from_instance" "main" {
-  name               = "${local.common_name}-main-${var.app_version}-${aws_instance.main.id}" # roboshop-dev-main-v3-instance-id
+  name               = "${local.common_name}-${var.app_version}-${aws_instance.main.id}" # roboshop-dev-main-v3-instance-id
   source_instance_id = aws_instance.main.id
   depends_on = [aws_ec2_instance_state.main]
   tags = merge(
     {
-        Name = "${local.common_name}-main-${var.app_version}-${aws_instance.main.id}"
+        Name = "${local.common_name}-${var.app_version}-${aws_instance.main.id}"
     },
     local.common_tags
   )
 }
 
 resource "aws_launch_template" "main" {
-  name = "${local.common_name}-main"
+  name = "${local.common_name}"
 
   image_id = aws_ami_from_instance.main.id # AMI ID
 
   instance_initiated_shutdown_behavior = "terminate"
   instance_type = "t3.micro"
-  vpc_security_group_ids = [local.main_sg_id]
+  vpc_security_group_ids = [local.sg_id]
   update_default_version = true 
 
   # Oncce the instances are created, these will become instance tags
@@ -71,7 +71,7 @@ resource "aws_launch_template" "main" {
 
     tags = merge(
       {
-          Name = "${local.common_name}-main-${var.app_version}-${aws_instance.main.id}"
+          Name = "${local.common_name}-${var.app_version}-${aws_instance.main.id}"
       },
       local.common_tags
     )
@@ -83,7 +83,7 @@ resource "aws_launch_template" "main" {
 
     tags = merge(
       {
-          Name = "${local.common_name}-main-${var.app_version}-${aws_instance.main.id}"
+          Name = "${local.common_name}-${var.app_version}-${aws_instance.main.id}"
       },
       local.common_tags
     )
@@ -92,14 +92,14 @@ resource "aws_launch_template" "main" {
   # Launch template resource tags
   tags = merge(
       {
-          Name = "${local.common_name}-main-${var.app_version}-${aws_instance.main.id}"
+          Name = "${local.common_name}-${var.app_version}-${aws_instance.main.id}"
       },
       local.common_tags
   )
 }
 
 resource "aws_lb_target_group" "main" {
-  name     = "${local.common_name}-main"
+  name     = "${local.common_name}"
   port     = 8080
   protocol = "HTTP"
   vpc_id   = local.vpc_id
