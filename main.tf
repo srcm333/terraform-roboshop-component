@@ -37,7 +37,7 @@ resource "terraform_data" "main" {
   }
 }
 
-/* resource "aws_ec2_instance_state" "main" {
+resource "aws_ec2_instance_state" "main" {
   instance_id = aws_instance.main.id
   state       = "stopped"
   depends_on = [terraform_data.main]
@@ -203,4 +203,4 @@ resource "terraform_data" "main_delete" {
   provisioner "local-exec" {
     command = "aws ec2 terminate-instances --instance-ids ${aws_instance.main.id}"
   }
-} */
+}
