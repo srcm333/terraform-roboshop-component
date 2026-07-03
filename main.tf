@@ -100,7 +100,7 @@ resource "aws_launch_template" "main" {
 
 resource "aws_lb_target_group" "main" {
   name     = "${local.common_name}"
-  port     = var.component == "forntend" ? "80" : "8080" 
+  port     = var.component == "frontend" ? "80" : "8080" 
   protocol = "HTTP"
   vpc_id   = local.vpc_id
   deregistration_delay = 30
@@ -109,8 +109,8 @@ resource "aws_lb_target_group" "main" {
     healthy_threshold = 2
     interval = 10
     matcher = "200-299"
-    path = var.component == "forntend" ? "/" : "/health" 
-    port = var.component == "forntend" ? "80" : "8080"
+    path = var.component == "frontend" ? "/" : "/health" 
+    port = var.component == "frontend" ? "80" : "8080"
     protocol = "HTTP"
     timeout = 5
     unhealthy_threshold = 2
@@ -139,6 +139,7 @@ resource "aws_autoscaling_group" "main" {
     strategy = "Rolling"
     preferences {
       min_healthy_percentage = 50
+      #min_healthy_percentage = 100
     }
     triggers = ["launch_template"]
   }
